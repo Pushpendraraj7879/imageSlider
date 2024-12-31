@@ -1,28 +1,27 @@
-import { useState, useMemo } from 'react';
-import './App.css';
-import Star from './Components/Star';
+import Card from "./Components/Card";
+import LeftButton from "./Components/leftButton";
+import RightButton from "./Components/rightButton";
+import imageData from "./data";
+import { GoDotFill } from "react-icons/go";
+import { useState } from "react";
+import Dot from "./Components/dot"
 
 function App() {
-  const [rating, setRating] = useState(0);
-  const [hoverElement, setHoverElement] = useState(0);
+  const [currentImage,setCurrentImage]=useState(0)
+  const handleLeft=()=>{
+  setCurrentImage((prev)=>prev-1)
+  }
 
-  const starArray = useMemo(() => Array.from({ length: 10 }, (_, i) => i + 1), []);
-
-  const getStarStyle = (index) => ({
-    color: (hoverElement ? index < hoverElement : index < rating) ? 'yellow' : null,
-  });
-
+  const handleRight=()=>{
+    setCurrentImage((prev)=>prev+1)
+  }
+ console.log(imageData[currentImage].imageSrc)
   return (
-    <div style={{ display: 'flex', gap: '5px' }} onMouseLeave={() => setHoverElement(0)}>
-      {starArray.map((_, i) => (
-        <Star
-          key={i + 1}
-          onHover={() => setHoverElement(i + 1)}
-          onToggle={() => setRating(i + 1)}
-          style={getStarStyle(i)}
-          value={i + 1}
-        />
-      ))}
+    <div className="flex flex-col items-center  border-2 w-[400px] h-[400px] relative">
+      <LeftButton  handleLeft={handleLeft} isDisable={currentImage==0} style={{position:"absolute",left:0,top:"40%"}}/>
+      <Card url={imageData[currentImage].imageSrc} />
+      <RightButton  handleRight={handleRight} isDisable={currentImage==9} style={{position:"absolute",right:0,top:"40%"}}/>
+     <Dot currentImage={currentImage}/>
     </div>
   );
 }
